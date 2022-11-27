@@ -1,0 +1,19 @@
+@import '../../index.scss';
+
+// @include mobile{
+   
+    .container{
+        // position: relative;
+
+        .allpost{
+                margin-bottom: 100px;
+                overflow: scroll;
+                &::-webkit-scrollbar{
+                    display: none;
+                }
+            .post{
+                margin-bottom: 20px;
+            }
+        }
+    }
+// }
