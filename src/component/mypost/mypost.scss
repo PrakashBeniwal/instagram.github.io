@@ -1,9 +1,5 @@
-@import '../../index.scss';
 
-
-// @include mobile{
-    
-    .container{
+    .mypost{
         height: 100%;
         width: 100%;
         overflow: scroll;
@@ -11,7 +7,6 @@
             display: none;
         }
         .postpage{
-            
         .top{
 
             display: flex;
@@ -108,6 +103,4 @@
             background-color: red;
         }
     }
-
 }
-// }

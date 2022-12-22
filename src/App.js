@@ -1,7 +1,12 @@
 
 import './App.css';
 import Home from './pages/home/Home';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  Navigate,
+} from "react-router-dom";
 import StoryVideo from './component/storyvideo/StoryVideo';
 import Profile from './pages/profile/Profile';
 import EditProfile from './component/editProfile/EditProfile';
@@ -11,31 +16,139 @@ import Bottombar from './component/bottombar/Bottombar';
 import Reels from './component/reels/Reels';
 import UserProfile from './pages/userProfile/UserProfile';
 import OpenPost from './component/openPost/OpenPost';
-import AllPosts from './component/allPosts/AllPosts';
-
+// import AllPosts from './component/allPosts/AllPosts';
+import Login from './pages/login/Login';
+// import { AuthContext } from './context/authContext';
+// import { useContext } from 'react';
+import Signup from './pages/signup/Signup';
+import Logout from './component/logout/Logout';
+import Uploads from './component/uploads/Uploads';
+import CreatePost from './component/createPost/CreatePost';
+import Mypost from './component/mypost/Mypost';
+// import { AuthContext } from './context/authContext';
 function App() {
+
+  // const {currentuser}=useContext(AuthContext);
+
+  const Layout = () => {
+
+
+   
+      
+      if (!localStorage.getItem('token')) {
+        
+       return(<Navigate to="/login"/>)
+          
+      }
+    
+    
+  
+    
+
+   
+    return (
+     
+        <div>
+       
+      
+          <Outlet />
+        <Bottombar/>
+          
+       
+        </div> 
+    );
+  };
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+      
+          <Layout />
+        
+      ),
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/profile",
+          element: <Profile />,
+        },
+        {
+          path: "/following",
+          element: <Following />,
+        },
+       
+        {
+          path: "/follower",
+          element: <Follower />,
+        },
+       
+        {
+          path: "/reels",
+          element: <Reels />,
+        },
+       
+        {
+          path: "/userProfile/:profile",
+          element: <UserProfile />,
+        },
+       
+      
+        {
+          path: "/editProfile",
+          element: <EditProfile />,
+        },
+        {
+          path: "/OpenPost/:open",
+          element: <OpenPost />,
+    
+        },
+        {
+          path: "/uploads",
+          element: <Uploads />,
+    
+        },
+        {
+          path: "/createPost",
+          element: <CreatePost/>,
+        },
+        {
+          path: "/mypost",
+          element: <Mypost/>,
+        },
+       
+      ],
+    },
+   
+    {
+      path: "/:name",
+      element: <StoryVideo />,
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/signup",
+      element: <Signup/>,
+    },
+    {
+      path: "/logout",
+      element: <Logout/>,
+    },
+  
+  
+  ]);
   return (
     <>
+ 
     <div style={{backgroundColor:'black'}}>
-    <BrowserRouter>
-      <Routes>
-        {/* <Route path="/" element={<Layout />}>
-        </Route> */}
-          <Route index element={<Home />} />
-          <Route path="/:name" element={<StoryVideo />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/editprofile" element={<EditProfile />} />
-          <Route path="/following" element={<Following />} />
-          <Route path="/follower" element={<Follower />} />
-          <Route path="/reels" element={<Reels />} />
-          <Route path="/userProfile" element={<UserProfile />} />
-          <Route path="/OpenPost" element={<OpenPost />} />
-          {/* <Route path="/AllPosts" element={<AllPosts />} /> */}
-      </Routes>
-      <Bottombar/>
-    </BrowserRouter>
-  
+    <RouterProvider router={router} />
     </div>
+  
     </>
   );
 }

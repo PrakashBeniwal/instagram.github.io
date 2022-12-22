@@ -1,41 +1,67 @@
-import {React,useState} from 'react'
+import {React,useState,useLayoutEffect, useContext} from 'react'
 import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined';
-import ViewCompactOutlinedIcon from '@mui/icons-material/ViewCompactOutlined';
-import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
-import SlideshowOutlinedIcon from '@mui/icons-material/SlideshowOutlined';
-import AllPosts from '../../component/allPosts/AllPosts';
-import Allreels from '../../component/allreels/Allreels';
 import { Link } from 'react-router-dom';
 import './userProfile.scss'
+import { useParams } from 'react-router-dom'
+import Uploads from '../../component/uploads/Uploads';
+import { AuthContext } from '../../context/authContext';
+
 
 const UserProfile = () => {
+  const {currentuser}=useContext(AuthContext);
     
-    const [uploads, setUploads] = useState(AllPosts)
-    const [line, setLine] = useState({h1:'none',h2:'none',h3:'none'})
-
+    let{profile}=useParams();
+    const [user, setUser] = useState(null)
+const [showfollow, setShowfollow] = useState(currentuser.following.includes(profile))
+    useLayoutEffect(() => {
+      
+        fetch(`http://localhost:5544/api/user${profile}`,{
+            headers:{'auth-token':localStorage.getItem('token')}
+          }).then(result=>{
+            result.json().then(res=>{
+              setUser(res)
+            })
+          })
+          // eslint-disable-next-line
+    }, [showfollow])
     
-                                                                                                        
-    const onclick=(e)=>{
-        setUploads(e)
-        if (e===AllPosts) {
-            setLine({h1:'block',h2:'none',h3:'none'})
+    const followuser=()=>{
+        fetch(`http://localhost:5544/api/follow`,{
+            method:'PUT',
+            headers:{'content-Type':'application/json','auth-token':localStorage.getItem('token')},
+            body:JSON.stringify({followId:profile})
+        }).then(res=>{
+            res.json().then(result=>{
+              setShowfollow(true)
 
-        }
-        if (e===Allreels) {
-            setLine({h1:'none',h2:'block',h3:'none'})
-
-        }
-        if (!e) {
-            setLine({h1:'none',h2:'none',h3:'block'})
-
-        }
+            })
+        })
     }
+
+    const unfollowuser=()=>{
+        fetch(`http://localhost:5544/api/unfollow`,{
+            method:'PUT',
+            headers:{'content-Type':'application/json','auth-token':localStorage.getItem('token')},
+            body:JSON.stringify({unfollowId:profile})
+        }).then(res=>{
+            res.json().then(result=>{
+              setShowfollow(false)
+
+            })
+        })
+
+    }
+                                                                                                        
+
   return (
+<>
+     {user ?
+
     <div className='profile'>
     <div className="profileTop">
         <div className="profileTopLeft">
-            <div className="username">ankurbeniwal</div>
+            <div className="username">{user.user.username}</div>
         </div>
         <div className="profileTopRight">
             <div className="create">
@@ -50,30 +76,37 @@ const UserProfile = () => {
     <div className="editProfile">
         <div className="profileDetail">
             <div className="userProfile">
-                <img className='profileimg' src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" />
-                <span>Beniwal Ankur</span>
+                <img className='profileimg' src={user.user.profilePic} alt="" />
+                <span>{user.user.name}</span>
             </div>
 
             <div className="posts">
-                <div className='noOfPosts'>10</div>
+                <div className='noOfPosts'>{user.posts.length}</div>
                 <div>Posts</div>
             </div>
             <div className="followers">
-                <div className='noOfFollower'>182</div>
+                <div className='noOfFollower'>{user.user.followers.length}</div>
                 <Link to={'/follower'} style={{textDecoration:'none'}}><div>  followers</div></Link>
 
             </div>
             <div className="following">
-                <div className='noOfFollowing'>158</div>
+                <div className='noOfFollowing'>{user.user.following.length}</div>
                 <Link to={'/following'} style={{textDecoration:'none'}}><div>  following</div></Link>
             </div>
         </div>
 
         <div className="followMessage">
-            <div>
+            {!showfollow?
+             <div>
 
-          <Link >  <button>Following</button></Link>
-            </div>
+             <Link >  <button onClick={followuser}>Follow</button></Link>
+               </div>:
+                <div>
+
+                <Link >  <button onClick={unfollowuser}>Unfollow</button></Link>
+                  </div>
+        }
+           
             <div>
             <Link >  <button>Message</button></Link>
 
@@ -81,29 +114,12 @@ const UserProfile = () => {
         </div>
     </div>
 
-    <div className="uploads">
-        <div className="icons">
-            <div>
-                <span onClick={()=>{onclick(AllPosts)}}><ViewCompactOutlinedIcon /></span>
-                <hr style={{display:line.h1}} />
-            </div>
-            <div>
-                <span onClick={()=>{onclick(Allreels)}}><SlideshowOutlinedIcon /></span>
-                
-                <hr style={{display:line.h2}} />
-                </div>
-            <div>
-                <span onClick={()=>{onclick()}}><AccountBoxOutlinedIcon /></span>
-                
-                <hr style={{display:line.h3}} />
-                </div>
-        </div>
-        <div>{uploads}</div>
-    </div>
+ <Uploads id={profile}/>
 
-
-
+ 
 </div>
+: <div>loading...!</div> }
+</>
   )
 }
 

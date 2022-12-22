@@ -1,0 +1,91 @@
+.login{
+    background-color: black;
+    height: 666px;
+    width: 360px;
+
+    .instaname{
+        text-align: center;
+        padding-top: 100px;
+        font-size: xx-large;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+    .logindetails{
+        margin-top: 30px;
+        width: 360px;
+        height: 400px;
+        display: flex;
+        // justify-content: center;
+         .loginflexbox{
+
+            width: 300px;
+            display: flex;
+            gap: 15px;
+        flex-direction: column;
+        margin-left: 25px;
+        .loginId{
+
+          input{
+            width: 90%;
+            padding: 15px;
+            border-radius: 5px;
+            outline: none;
+            background-color: rgb(49, 47, 47);
+            color: white;
+            border: 0;
+          }
+        }
+        .loginPassword{
+           border: 0;
+            input{
+                width: 90%;
+            padding: 15px;
+            border-radius: 5px;
+                outline: none;
+                background-color: rgb(39, 34, 34);
+            border: 0;
+
+                color: white;
+              }
+           
+        }
+        .loginbtn{
+            button{
+                width: 100%;
+            padding: 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            
+            // background-color: rgb(6, 78, 102);   
+            background-color: rgba(0, 0, 255, 0.349);    
+               }
+               :active{
+            background-color: rgba(121, 121, 238, 0.349);    
+                 
+            } 
+        }
+        
+        div{
+            font-size: small;
+            text-align: center;
+            
+            span{
+                font: bolder;
+                color: blue;
+            }
+        }
+    }
+   
+   
+
+}
+
+.createAcc{
+    text-align: center;
+    span{
+        color: blue;
+    }
+}
+
+
+}

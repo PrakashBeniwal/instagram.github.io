@@ -5,6 +5,13 @@
     .container{
         // position: relative;
 
+         .homeTop{
+      display: flex;
+      justify-content: space-between;
+      margin: 0 20px;
+      font-size: x-large;
+    }
+
         .allpost{
                 margin-bottom: 100px;
                 overflow: scroll;

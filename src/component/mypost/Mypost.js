@@ -1,24 +1,14 @@
-import React,{useContext, useState} from 'react'
-import './post.scss'
+import React,{useState} from 'react'
+import './mypost.scss'
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import {Link} from "react-router-dom"
-import { AuthContext } from '../../context/authContext';
 
-const Post = ({post}) => {
+const Mypost = ({post}) => {
 
     const [setting, setSetting] = useState(false);
-  const {currentuser}=useContext(AuthContext);
-    
-
-    // const [user, setUser] = useState('')
-    // useEffect(() => {
-    //     setUser(JSON.parse(localStorage.getItem('user')))
-    //     console.log(user)
-    // }, [])
-    
 
     const showsetting=()=>{
       setSetting(!setting);
@@ -35,13 +25,12 @@ const Post = ({post}) => {
             })
         })
     }
-
   return (
-    <div className='container' >
+    <div className='mypost' >
 
     <div className='postpage'>
         <div className="top">
-       <Link to={post.user._id!==currentuser._id?'/userProfile/'+post.user._id:'/profile'} style={{color:'white',textDecoration:"none"}} >    <div className="top-left" >
+       <Link to={'/userProfile/'+post.user._id} style={{color:'white',textDecoration:"none"}} >    <div className="top-left" >
             <img src={post.user.profilePic} alt="" />
             <span >{post.user.name}</span>
             </div></Link> 
@@ -77,11 +66,14 @@ const Post = ({post}) => {
             <div className="add-comment">Add a comment...</div>
         </div>
     </div>
+
     <div className={setting?'setting-active':'postsetting'}>
-       {post.user._id===currentuser._id &&<button onClick={deletePost}>delete</button>}
+        <button onClick={deletePost}>delete</button>
     </div>
+
+
     </div>
   )
 }
 
-export default Post
+export default Mypost
