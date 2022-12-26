@@ -1,23 +1,23 @@
-import React,{useContext, useState} from 'react'
+import React,{useContext, useEffect, useState} from 'react'
 import './post.scss'
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import { AuthContext } from '../../context/authContext';
 
 const Post = ({post}) => {
-
+  const navigate=useNavigate();
     const [setting, setSetting] = useState(false);
   const {currentuser}=useContext(AuthContext);
-    
+const [like, setLike] = useState()   
+const [comment, setComment] = useState('') 
 
     // const [user, setUser] = useState('')
-    // useEffect(() => {
-    //     setUser(JSON.parse(localStorage.getItem('user')))
-    //     console.log(user)
-    // }, [])
+    useEffect(() => {
+       setLike(post.likes.includes(currentuser._id))
+    }, [])
     
 
     const showsetting=()=>{
@@ -32,6 +32,48 @@ const Post = ({post}) => {
         }).then(res=>{
             res.json().then(result=>{
                 alert(result.delete)
+                window.location.reload();
+            })
+        })
+    }
+
+    const likepost=()=>{
+     fetch('http://localhost:5544/api/like',{
+        method:"PUT",
+        headers:{'content-Type':'application/json','auth-token':localStorage.getItem('token')},
+        body:JSON.stringify({postId:post._id})
+     }).then(res=>{
+        res.json().then(res=>{
+           setLike(true)
+           window.location.reload();
+        })
+     })
+    }
+
+    const unlikepost=()=>{
+        fetch('http://localhost:5544/api/unlike',{
+            method:"PUT",
+            headers:{'content-Type':'application/json','auth-token':localStorage.getItem('token')},
+            body:JSON.stringify({postId:post._id})
+         }).then(res=>{
+            res.json().then(res=>{
+               setLike(false)
+           window.location.reload();
+
+            })
+         })
+    }
+
+    const makeComment=(e)=>{
+        e.preventDefault();
+        fetch('http://localhost:5544/api/comment',{
+            method:'PUT',
+            headers:{'Content-Type':'application/json','auth-token':localStorage.getItem('token')},
+            body:JSON.stringify({postId:post._id,text:comment})
+        }).then((res)=>{
+            res.json().then(result=>{
+                setComment('')
+                navigate('/comments/'+post._id)
             })
         })
     }
@@ -61,8 +103,9 @@ const Post = ({post}) => {
 
         <div className="bottom">
             <div className="bottom-left">
-                <div><FavoriteBorderOutlinedIcon/></div>
-                <div><MapsUgcOutlinedIcon/></div>
+                {like?<div><FavoriteBorderOutlinedIcon onClick={unlikepost} style={{backgroundColor:'red'}}/>{post.likes.length}</div>
+                :<div><FavoriteBorderOutlinedIcon onClick={likepost} />{post.likes.length}</div>}
+               <Link to={'/comments/'+post._id} style={{color:'white', textDecoration:'none'}}> <div><MapsUgcOutlinedIcon/></div></Link>
                 <div><SendOutlinedIcon/></div>
             </div>
             <div className="bottom-right">
@@ -73,8 +116,11 @@ const Post = ({post}) => {
         <div className="description">{post.caption}</div>
 
         <div className="comments">
-            <div>View all commments</div>
-            <div className="add-comment">Add a comment...</div>
+            <Link to={'/comments/'+post._id} style={{color:'white', textDecoration:'none'}}><div>View all commments</div></Link>
+            <form className='add-comment' >
+                <input type="text" placeholder='add comment' onChange={(e)=>{setComment(e.target.value)}} value={comment}/>
+                {comment &&<button onClick={makeComment}>post</button>}
+            </form>
         </div>
     </div>
     <div className={setting?'setting-active':'postsetting'}>

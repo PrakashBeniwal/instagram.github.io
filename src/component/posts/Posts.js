@@ -4,8 +4,8 @@ import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined
 
 import './posts.scss'
 import { useState ,useEffect} from 'react';
-import Story from '../../component/story/Story'
 import { Link } from 'react-router-dom';
+import Story from '../../component/story/Story'
 
 const Posts = () => {
 

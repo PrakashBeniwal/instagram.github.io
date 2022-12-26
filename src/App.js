@@ -25,6 +25,9 @@ import Logout from './component/logout/Logout';
 import Uploads from './component/uploads/Uploads';
 import CreatePost from './component/createPost/CreatePost';
 import Mypost from './component/mypost/Mypost';
+import Comments from './component/comments/Comments';
+import SearchUser from './component/searchUser/SearchUser';
+import FollowingPosts from './component/posts/FollowingPosts';
 // import { AuthContext } from './context/authContext';
 function App() {
 
@@ -71,6 +74,18 @@ function App() {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/followingPosts",
+          element: <FollowingPosts />,
+        },
+        {
+          path: "/search",
+          element: <SearchUser/>,
+        },
+        {
+          path: "/comments/:comment",
+          element: <Comments />,
         },
         {
           path: "/profile",

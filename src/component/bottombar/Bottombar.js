@@ -17,7 +17,7 @@ const Bottombar = () => {
         
 
         
-          <Link><div className="link"> <SearchOutlinedIcon /></div> </Link>
+          <Link to={'/search'}><div className="link"> <SearchOutlinedIcon /></div> </Link>
           
           <Link to={'/reels'}><div className="link">
            <SlideshowOutlinedIcon />

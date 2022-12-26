@@ -1,4 +1,4 @@
-import {React,useState,useEffect} from 'react'
+import {React,useState, useLayoutEffect, useRef} from 'react'
 import SlideshowOutlinedIcon from '@mui/icons-material/SlideshowOutlined';
 
 import './createPost.scss'
@@ -8,8 +8,13 @@ const CreatePost = () => {
   const [caption, setCaption] = useState('')
   const [url, setUrl] = useState('')
 const [deleteid, setDeleteid] = useState('')
+const firstupdate = useRef(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (!firstupdate.current) {
+      firstupdate.current=true;
+      return;
+    }
     fetch('http://localhost:5544/api/post',{
       method:'POST',
         headers:{'auth-token':localStorage.getItem('token')
@@ -24,6 +29,8 @@ const [deleteid, setDeleteid] = useState('')
           alert('posted succesfully')
         })
       })
+
+    
   
   // eslint-disable-next-line
   }, [url])

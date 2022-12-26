@@ -1,89 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './following.scss'
 const Following = () => {
-  const friend = [
-    {
-      id: 1,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 2,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 3,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 4,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 5,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 6,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 7,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 8,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 9,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 10,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 11,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 12,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 13,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 14,
-      name: "prakashbeniwal",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-  ];
+  const [following, setFollowing] = useState([])
+  useEffect(() => {
+    fetch('http://localhost:5544/api/following',{
+      headers:{'auth-token':localStorage.getItem('token')}
+    }).then(res=>{
+      res.json().then(result=>{
+        setFollowing(result)
+      }).catch(err=>{
+        console.log(err)
+      })
+    })
+  }, [])
+  
   return (
     <div className='followingPage'>
+      <div>Following</div>
       
-{friend.map((friend)=>{
+{following.map((friend)=>{
   return(
-    <div className="person" key={friend.id}>
+    <div className="person" key={friend._id}>
         <div className="left">
     <div><img src={friend.img} alt="" /></div>
     <div className='name'>
       <span className='username'>
-      {friend.name}
+      {friend.username}
         </span> 
         <span>
         {friend.name}</span> </div>

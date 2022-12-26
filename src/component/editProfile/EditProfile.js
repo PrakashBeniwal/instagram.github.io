@@ -1,17 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './editProfile.scss'
 const EditProfile = () => {
+    const [edit, setEdit] = useState(false)
     return (
         <div className='editprofile'>
 
         <div className="changeprofile">
             <div className="profilephoto">
-                <img src="https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072821__480.jpg" alt="" />
+                <img src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" />
              <span>Change profile photo</span>
             </div>
         </div>
 
-        <div className="personaldetail">
+        <div className="personaldetail" onClick={()=>{setEdit(true)}}>
             <div className="name">
                 <span>Name</span>
                 <div>Beniwal Prakash</div>
@@ -40,6 +41,14 @@ const EditProfile = () => {
             <div className='link'>
 
             <a href="/">Personal information settings</a>
+            </div>
+
+            <div className={edit?`inputdetail`:"InputDetail"}>
+                <input type="text" className="inputname" placeholder='name'/>
+                <input type="text" className="inputusername" placeholder='username'/>
+                <input type="text" disabled className="inputbio" placeholder='bio'/>
+                <button className='update'>update</button>
+                <button className='update' onClick={()=>{setEdit(false)}}>cancel</button>
             </div>
         </div>
     )

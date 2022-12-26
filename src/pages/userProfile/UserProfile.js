@@ -6,34 +6,32 @@ import './userProfile.scss'
 import { useParams } from 'react-router-dom'
 import Uploads from '../../component/uploads/Uploads';
 import { AuthContext } from '../../context/authContext';
-
-
 const UserProfile = () => {
-  const {currentuser}=useContext(AuthContext);
-    
+  const {currentuser}=useContext(AuthContext);  
     let{profile}=useParams();
-    const [user, setUser] = useState(null)
-const [showfollow, setShowfollow] = useState(currentuser.following.includes(profile))
+  const [user, setUser] = useState(null)
+// const [showfollow, setShowfollow] = useState(currentuser.following.includes(profile))
+const [showfollow, setShowfollow] = useState()
+
     useLayoutEffect(() => {
-      
         fetch(`http://localhost:5544/api/user${profile}`,{
             headers:{'auth-token':localStorage.getItem('token')}
           }).then(result=>{
             result.json().then(res=>{
               setUser(res)
+              setShowfollow(user && !user.user.followers.includes(currentuser._id))
             })
           })
           // eslint-disable-next-line
-    }, [showfollow])
-    
+    }, [showfollow])                                         
     const followuser=()=>{
-        fetch(`http://localhost:5544/api/follow`,{
+              fetch(`http://localhost:5544/api/follow`,{
             method:'PUT',
             headers:{'content-Type':'application/json','auth-token':localStorage.getItem('token')},
             body:JSON.stringify({followId:profile})
         }).then(res=>{
             res.json().then(result=>{
-              setShowfollow(true)
+              setShowfollow(false)
 
             })
         })
@@ -46,7 +44,7 @@ const [showfollow, setShowfollow] = useState(currentuser.following.includes(prof
             body:JSON.stringify({unfollowId:profile})
         }).then(res=>{
             res.json().then(result=>{
-              setShowfollow(false)
+              setShowfollow(true)
 
             })
         })
@@ -96,7 +94,7 @@ const [showfollow, setShowfollow] = useState(currentuser.following.includes(prof
         </div>
 
         <div className="followMessage">
-            {!showfollow?
+            {showfollow?
              <div>
 
              <Link >  <button onClick={followuser}>Follow</button></Link>

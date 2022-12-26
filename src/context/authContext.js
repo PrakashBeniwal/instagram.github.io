@@ -18,13 +18,16 @@ export const AuthContextProvider=({children})=>{
         });
 
         const result=await res.json();
-        setCurrentuser(result.user)
-        localStorage.setItem('token',result.token)
-        localStorage.setItem('user',JSON.stringify(result.user))
-        console.log(result)
-       if (result.problem) {
-        alert(result.problem)
-       }
+        if (result.problem) {
+            alert(result.problem)
+        }
+        else{
+
+            setCurrentuser(result.user)
+            localStorage.setItem('token',result.token)
+            localStorage.setItem('user',JSON.stringify(result.user))
+            console.log(result)
+        }
 
     }
     
