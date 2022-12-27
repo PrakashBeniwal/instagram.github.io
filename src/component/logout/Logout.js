@@ -4,15 +4,15 @@ import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 const Logout = () => {
 
-const navigate=useNavigate()
-    const {logout}=useContext(AuthContext);
-    const handlelogout=()=>{
-       logout();
-       navigate('/login')
-    }
+  const navigate = useNavigate()
+  const { logout } = useContext(AuthContext);
+  const handlelogout = () => {
+    logout();
+    navigate('/login')
+  }
   return (
     <div>
-        <button  onClick={handlelogout}>logout</button>
+      <button onClick={handlelogout}>logout</button>
     </div>
   )
 }

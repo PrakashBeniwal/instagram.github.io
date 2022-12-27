@@ -1,29 +1,17 @@
-.reels{
+.reels {
     width: 360px;
     height: 600px;
-    // position: relative;
-    // display: flex;
-    // flex-direction: column;
-    // overflow-y: auto;
-    // position: fixed;
-
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
-    // position: fixed;
-    
- 
-    .reel{
-        //  background-color: aqua;
-         margin: 0 ;
+    font-size: xx-large;
+    .reel {
+        margin: 0;
 
-        video{
+        video {
             width: 360px;
-            // height: 667px;
-            height:98%;
-          
-
+            height: 98%;
         }
     }
 }

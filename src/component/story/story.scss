@@ -1,48 +1,33 @@
-@import "../../index.scss";
+.Story {
+    position: relative;
+    margin: 0px 10px;
+    width: 340px;
+    overflow: scroll;
+    display: flex;
 
-// @include mobile{
-    .Story{
-        position: relative;
-           margin: 0px 10px;
-        width: 340px;
-        overflow: scroll;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .stories {
+        height: 80px;
+        margin-bottom: 20px;
+        margin-top: 20px;
         display: flex;
-        &::-webkit-scrollbar{
-            display: none;
-        }
-        .stories{
-            height: 80px;
-            margin-bottom: 20px;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: row;
-            gap: 20px;
-            // overflow: scroll;
-            // width: 1000px;
-            .story{
-                    // flex: 1;
-                    position: relative;
-                    img{
-                        border-radius: 50%;
-                        height: 60%;
-                        width: 120%;
-                        object-fit: cover;
-                    }
-                    span{
+        flex-direction: row;
+        gap: 20px;
 
-                    }
-                    // button{
-                    //     // position: absolute;
-                    //     color:black;
-                    //     // background-color: #5271ff;
-                    //     // border-radius: 50%;
-                    //     font-size: 60px;
-                    //     // left: 20px;
-                    //     // bottom: 1px;
-                    //     width: 30px;
-                    //     height: 30px;
-                    // }
+        .story {
+            position: relative;
+
+            img {
+                border-radius: 50%;
+                height: 60%;
+                width: 120%;
+                object-fit: cover;
             }
+
+            span {}
         }
-    } 
-// }
+    }
+}

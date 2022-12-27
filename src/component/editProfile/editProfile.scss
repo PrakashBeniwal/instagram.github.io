@@ -1,114 +1,86 @@
-.editprofile{
+.editprofile {
     width: 350px;
     height: 600px;
-   
-    .changeprofile{
+
+    .profileUpdate {
+        display: flex;
+        justify-content: space-between;
+        margin: 0 10px;
+    }
+
+    .changeprofile {
         padding-top: 20px;
         display: flex;
         justify-content: center;
         align-content: center;
-        .profilephoto{
+
+        label {
+            cursor: pointer;
+
+            input {
+                display: none;
+            }
+        }
+
+        .profilephoto {
             display: flex;
             flex-direction: column;
-            img{
+
+            img {
                 width: 50px;
                 height: 50px;
                 border-radius: 50%;
                 display: flex;
-            align-self: center;
+                align-self: center;
+                object-fit: cover;
             }
-            span{
+
+            span {
                 display: block;
                 font-size: small;
             }
         }
     }
 
-    .personaldetail{
+    .personaldetail {
         margin-left: 10px;
 
-        .name{
-            span{
-              display: block;
-              font-size: small;
-              color: lightgray;
-            }
-            div{
-                width: 100%;
-                background-color: black;
+        input {
+            width: 90%;
+            border: none;
+            padding: 5px;
+            margin-bottom: 20px;
+            outline: none;
+            background-color: black;
+            border-bottom: 1px solid white;
+            color: white;
 
-                color: white;
-                
-            }
-        }
-        .username{
-            span{
-              display: block;
-              font-size: small;
-              color: lightgray;
-            }
-            div{
-
-            }
-        }
-        .bio{
-            span{
-              display: block;
-              font-size: small;
-              color: lightgray;
-            }
-            div{
-
+            &::placeholder {
+                color: darkgray;
             }
         }
 
-        
+        span {
+            display: block;
+            font-size: small;
+            color: lightgray;
+            margin-left: 6px;
+        }
+
+
     }
-    .link{
+
+    .link {
         border: 1px solid rgba(245, 245, 245, 0.219);
         padding: 10px;
         margin: 10px 0;
         width: 100%;
 
-        a{
+        a {
             color: blue;
             text-decoration: none;
         }
     }
 
-    .inputdetail{
-        
-        background-color: black;
-        position: fixed;
-        width: 360px;
-        height: 400px;
-        top: 90px;
-        input{
-            width: 80%;
-            border: none;
-            padding: 5px;
-            margin: 10px;
-            outline: none;
-            border-radius: 5px;
-        }
 
-        .update{
-            margin: 10px;
-            background-color: blue;
-            padding: 7px;
-            border-radius: 7px;
-            color: white;
-        }
-        .update:active{
-            background-color: skyblue;
-        }
-
-    }
-    .InputDetail{
-        background-color: black;
-        position: fixed;
-        width: 360px;
-        height: 400px;
-        left: -500px; 
-    }
 }

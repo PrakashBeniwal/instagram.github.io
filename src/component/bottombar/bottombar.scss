@@ -1,26 +1,18 @@
-
-
-.bottombar{
-
+.bottombar {
     background-color: black;
-   
     color: white;
     width: 330px;
     z-index: 0;
     display: flex;
     padding: 15px;
     gap: 50px;
-    .link{
+    .link {
         color: white;
-
-      
     }
- 
-    img{
+    img {
         width: 30px;
         height: 30px;
         border-radius: 50%;
-
+        object-fit: cover;
     }
 }
-

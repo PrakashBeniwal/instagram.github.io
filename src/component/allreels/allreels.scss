@@ -1,25 +1,20 @@
-.allreels{
+.allreels {
     width: 380px;
     height: 700px;
     border-top: 1px solid rgba(245, 245, 245, 0.37);
-    border-bottom:1px solid rgba(245, 245, 245, 0.37) ;
-    // height: 400px;
-    // overflow: scroll;
+    border-bottom: 1px solid rgba(245, 245, 245, 0.37);
 
-    .reel{
-        // display: grid;
-        // grid-template-columns: repeat(3,1fr);
-        // gap: 2px;
-        // grid-template-columns: repeat(3,120px);
-display: flex;
-flex-wrap: wrap;
-gap: 0;
-        .reelvideo{
-            img{
-                width:120px;
-                height:100%;
+    .reel {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0;
+
+        .reelvideo {
+            img {
+                width: 120px;
+                height: 100%;
                 margin: 0;
-                border:1px solid black;
+                border: 1px solid black;
             }
         }
     }

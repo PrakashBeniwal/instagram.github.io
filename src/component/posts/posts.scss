@@ -1,23 +1,17 @@
-@import '../../index.scss';
+.container {
 
-// @include mobile{
-   
-    .container{
-        // position: relative;
-
-
-         .homeTop{
-      display: flex;
-      justify-content: space-between;
-      margin: 0 20px;
-      font-size: x-large;
+    .homeTop {
+        display: flex;
+        justify-content: space-between;
+        margin: 0 20px;
+        font-size: x-large;
     }
 
-    .followingPost{
+    .followingPost {
         font-family: Arial, Helvetica, sans-serif;
         width: 110px;
 
-        select{
+        select {
             appearance: none;
             background-color: transparent;
             color: cyan;
@@ -33,18 +27,19 @@
             padding: 4px;
         }
 
-      
+
     }
 
-        .allpost{
-                margin-bottom: 100px;
-                overflow: scroll;
-                &::-webkit-scrollbar{
-                    display: none;
-                }
-            .post{
-                margin-bottom: 20px;
-            }
+    .allpost {
+        margin-bottom: 100px;
+        overflow: scroll;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .post {
+            margin-bottom: 20px;
         }
     }
-// }
+}

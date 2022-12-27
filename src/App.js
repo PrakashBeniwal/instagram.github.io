@@ -16,48 +16,23 @@ import Bottombar from './component/bottombar/Bottombar';
 import Reels from './component/reels/Reels';
 import UserProfile from './pages/userProfile/UserProfile';
 import OpenPost from './component/openPost/OpenPost';
-// import AllPosts from './component/allPosts/AllPosts';
 import Login from './pages/login/Login';
-// import { AuthContext } from './context/authContext';
-// import { useContext } from 'react';
 import Signup from './pages/signup/Signup';
 import Logout from './component/logout/Logout';
 import Uploads from './component/uploads/Uploads';
 import CreatePost from './component/createPost/CreatePost';
-import Mypost from './component/mypost/Mypost';
 import Comments from './component/comments/Comments';
 import SearchUser from './component/searchUser/SearchUser';
 import FollowingPosts from './component/posts/FollowingPosts';
-// import { AuthContext } from './context/authContext';
 function App() {
-
-  // const {currentuser}=useContext(AuthContext);
-
   const Layout = () => {
-
-
-   
-      
       if (!localStorage.getItem('token')) {
-        
        return(<Navigate to="/login"/>)
-          
       }
-    
-    
-  
-    
-
-   
     return (
-     
         <div>
-       
-      
           <Outlet />
         <Bottombar/>
-          
-       
         </div> 
     );
   };
@@ -66,9 +41,7 @@ function App() {
     {
       path: "/",
       element: (
-      
           <Layout />
-        
       ),
       children: [
         {
@@ -92,12 +65,12 @@ function App() {
           element: <Profile />,
         },
         {
-          path: "/following",
+          path: "/following/:follow",
           element: <Following />,
         },
        
         {
-          path: "/follower",
+          path: "/follower/:follower",
           element: <Follower />,
         },
        
@@ -131,16 +104,10 @@ function App() {
           element: <CreatePost/>,
         },
         {
-          path: "/mypost",
-          element: <Mypost/>,
+          path: "/logout",
+          element: <Logout/>,
         },
-       
       ],
-    },
-   
-    {
-      path: "/:name",
-      element: <StoryVideo />,
     },
     {
       path: "/login",
@@ -150,22 +117,14 @@ function App() {
       path: "/signup",
       element: <Signup/>,
     },
-    {
-      path: "/logout",
-      element: <Logout/>,
-    },
-  
-  
+   
   ]);
   return (
     <>
- 
     <div style={{backgroundColor:'black'}}>
     <RouterProvider router={router} />
     </div>
-  
     </>
   );
 }
-
 export default App;

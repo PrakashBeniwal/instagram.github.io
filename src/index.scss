@@ -5,19 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  // background-color: black;
- 
-  // overflow: visible;
-  // height: 600px;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-@mixin mobile {
-  @media (max-width: 480px) {
-    @content;
-  }
 }

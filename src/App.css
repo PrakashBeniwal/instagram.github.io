@@ -4,3 +4,6 @@ body{
     background-color: white;
     color: white;
 }
+img{
+    object-fit: cover;
+}
