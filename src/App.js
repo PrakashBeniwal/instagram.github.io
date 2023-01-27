@@ -2,7 +2,7 @@
 import './App.css';
 import Home from './pages/home/Home';
 import {
-  createBrowserRouter,
+  createHashRouter,
   RouterProvider,
   Outlet,
 } from "react-router-dom";
@@ -45,7 +45,7 @@ localStorage.setItem('id',data.uid)
     );
   };
 
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       path: "/",
       element: (
