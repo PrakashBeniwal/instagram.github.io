@@ -1,15 +1,16 @@
 import React from 'react'
 import './login.scss'
-import { AuthContext } from '../../context/authContext'
-import { useContext, useState } from 'react'
+import {  useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import {auth} from '../../firebase'
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext)
   const [input, setInput] = useState({ email: '', password: '' })
-  const handlelogin = async (e) => {
-    await login(input.email, input.password);
-    navigate('/')
+  const handlelogin =(e) => {
+    auth.signInWithEmailAndPassword(input.email, input.password).then(result=>{
+      alert('logged In')
+       navigate('/')
+     }).catch(err=>{alert('invalid details')})
   }
 
   const onchange = (e) => {
@@ -26,7 +27,7 @@ const Login = () => {
       <div className="logindetails">
         <div className="loginflexbox">
           <div className="loginId">
-            <input type="text" name='email' value={input.email} onChange={onchange} placeholder='email or username' />
+            <input type="text" name='email' value={input.email} onChange={onchange} placeholder='email' />
           </div>
           <div className="loginPassword">
             <input type="password" name='password' value={input.password} onChange={onchange} placeholder='password' />

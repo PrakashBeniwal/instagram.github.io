@@ -22,4 +22,24 @@
             }
         }
     }
+
+    .caption{
+       input{
+                height: 30px;
+               border-radius: 7px;
+                border: none;
+                font-size: larger;
+                font-weight: bold;
+                padding: 10px;
+
+            }
+    }
+
+    button{
+        font-size: larger;
+        border-radius: 7px;
+        padding: 10px;
+        background-color: rgb(155, 21, 148);
+        border: none;
+    }
 }

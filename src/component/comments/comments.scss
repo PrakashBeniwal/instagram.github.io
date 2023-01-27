@@ -3,6 +3,46 @@
     width: 360px;
     overflow-y: scroll;
 
+
+    .add-comment {
+        position: fixed;
+        bottom: 0px;
+        // height: 50px;
+        background-color: gray;
+        height: 50px;
+        width: 360px;
+        input {
+            background-color: gray;
+            color: black;
+            font: bold;
+            border: none;
+            font-size: larger;
+            outline: none;
+            border-bottom-style: solid;
+            margin: 10px;
+          
+         &::placeholder{
+            color: white;
+         }
+        }
+
+        button {
+            // background-color: blue;
+            color: blue;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            font-weight: bolder;
+            font-weight: bolder;
+            font-size: large;
+
+        }
+    }
+
+    .displaycom{
+        margin-bottom: 60px;
+
+
     .commentText {
         font-size: xx-large;
         margin: 10px;
@@ -53,4 +93,4 @@
             min-width: max-content;
         }
     }
-}
+}}

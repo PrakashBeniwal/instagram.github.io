@@ -1,26 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { db } from '../../firebase';
 const Comment = ({ comment, postId }) => {
     const [deleted, setDeleted] = useState(false);
-    const deleting = () => {
-        fetch('http://localhost:5544/api/uncomment', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('token') },
-            body: JSON.stringify({ postId, commentId: comment._id })
-        }).then((res) => {
-            res.json().then(() => {
-                setDeleted(false)
-                window.location.reload();
-            })
+    const [user, setUser] = useState()
+    useEffect(() => {
+     
+        db.ref(`users/${comment.postedBy}`)
+        .on('value',(snap)=>{
+            setUser(snap.val())
         })
+    }, [])
+    
+    const deleting = () => {
+        db.ref(`comments/${comment.id}`).remove()
+        setDeleted(false)
     }
     return (
         <div className='comment'>
             <div className={deleted ? 'delComment' : 'deleteComment'}>
                 <button onClick={deleting}>delete</button>
             </div>
-            <img src={comment.postedBy.profilePic} alt="" />
-            <span className='commentedBy' onClick={() => { setDeleted(!deleted) }}>
-                {comment.postedBy.name} :
+            <img src={user&&user.profilePic} alt="" />
+            <span className='commentedBy' onClick={() => {comment.postedBy===localStorage.getItem('id')&& setDeleted(!deleted) }}>
+                {user&&user.name}:
             </span>
             <span>
                 {comment.text}</span>

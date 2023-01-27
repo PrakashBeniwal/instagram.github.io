@@ -1,17 +1,16 @@
 import React from 'react'
-import { AuthContext } from '../../context/authContext'
-import { useContext } from 'react'
+import { auth } from '../../firebase'
 import { useNavigate } from 'react-router-dom'
+import './logout.scss'
 const Logout = () => {
 
   const navigate = useNavigate()
-  const { logout } = useContext(AuthContext);
   const handlelogout = () => {
-    logout();
+    auth.signOut()
     navigate('/login')
   }
   return (
-    <div>
+    <div className='logout'>
       <button onClick={handlelogout}>logout</button>
     </div>
   )

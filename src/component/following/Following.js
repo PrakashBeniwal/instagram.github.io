@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { db } from '../../firebase'
 import './following.scss'
 import Person from './Person'
 const Following = () => {
@@ -7,14 +8,18 @@ const Following = () => {
 
   const { follow } = useParams()
   useEffect(() => {
-    fetch(`http://localhost:5544/api/following${follow}`, {
-      headers: { 'auth-token': localStorage.getItem('token') }
-    }).then(res => {
-      res.json().then(result => {
-        setFollowing(result)
-      }).catch(err => {
-        console.log(err)
-      })
+    db.ref(`users/${follow}`)
+    .on('value',(snap)=>{
+        snap.val().following.forEach((i)=>{
+          db.ref(`users/${i}`)
+          .on('value',(snap)=>{
+            if (following!==[]) {  
+              setFollowing([...following,snap.val()])
+            }else{
+              setFollowing(snap.val())
+            } 
+          }) 
+        })
     })
   }, [])
   return (
@@ -23,7 +28,7 @@ const Following = () => {
 
       {following.map((friend) => {
         return (
-          <Person friend={friend} key={friend._id} />
+          <Person friend={friend} key={friend.uid} />
         )
       })}
     </div>

@@ -1,23 +1,34 @@
-import React, { useContext, useState } from 'react'
+import React, {  useState } from 'react'
 import './searchUser.scss'
 import { Link } from 'react-router-dom'
-import { AuthContext } from '../../context/authContext'
+import { db } from '../../firebase'
 const SearchUser = () => {
 
-  const { currentuser } = useContext(AuthContext)
   const [user, setUser] = useState([])
 
   const finduser = (query) => {
 
-    fetch('http://localhost:5544/api/searchUsers', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user: query, username: query })
-    }).then(res => {
-      res.json().then(result => {
-        setUser(result)
+    if (query!='') {
+      db.ref(`users`).orderByChild('name')
+      .startAt(query)
+      .limitToFirst(5)
+      .once('value',(snap)=>{
+        if (snap.val()) {  
+          setUser(Object.values(snap.val()))
+        }
       })
-    })
+    }
+   
+
+    // fetch('http://localhost:5544/api/searchUsers', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ user: query, username: query })
+    // }).then(res => {
+    //   res.json().then(result => {
+    //     setUser(result)
+    //   })
+    // })
   }
   return (
     <div className='SearchUser'>
@@ -25,7 +36,7 @@ const SearchUser = () => {
       {user.map((e) => {
 
         return (
-          <Link to={e._id !== currentuser._id ? '/userProfile/' + e._id : '/profile'} style={{ color: 'white', textDecoration: "none" }} key={e._id}> <div className="user" >
+          <Link to={e.id !== localStorage.getItem('id') ? '/userProfile/' + e.id : '/profile'} style={{ color: 'white', textDecoration: "none" }} key={e.uid}> <div className="user" >
             <img src={e.profilePic} alt="" />
             <div className="userdetail">
               <span>{e.username}</span>

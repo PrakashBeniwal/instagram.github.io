@@ -10,16 +10,11 @@ const Profile = () => {
     const [currentuser, setCurrentuser] = useState()
 
     const me = () => {
-        fetch('http://localhost:5544/api/me',
-            { headers: { 'auth-token': localStorage.getItem('token') } }).then(
-                res => {
-                    res.json().then(result => {
-                        setCurrentuser(result)
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                }
-            )
+        fetch(`https://instaclone-d3b52-default-rtdb.firebaseio.com/users/${localStorage.getItem('id')}.json`).then(res => {
+            res.json().then(result => {
+                setCurrentuser(result)
+            })
+        })
     }
 
     useEffect(() => {
@@ -31,14 +26,14 @@ const Profile = () => {
                 <>
                     <div className="profileTop">
                         <div className="profileTopLeft">
-                            <div className="username">{currentuser.user.username}</div>
+                            <div className="username">{currentuser.username}</div>
                         </div>
                         <div className="profileTopRight">
                             <div className="create">
                                 <Link to={'/createPost'} style={{ color: 'white' }}> <LocalHospitalOutlinedIcon /></Link>
                             </div>
                             <div className="Mainsetting">
-                                <Link to={'/logout'}>  <div><SettingsSuggestOutlinedIcon /></div></Link>
+                                <Link to={'/logout'} style={{color:'white'}}>  <div><SettingsSuggestOutlinedIcon /></div></Link>
                             </div>
                         </div>
                     </div>
@@ -46,22 +41,22 @@ const Profile = () => {
                     <div className="editProfile">
                         <div className="profileDetail">
                             <div className="userProfile">
-                                <img className='profileimg' src={currentuser.user.profilePic} alt="" />
-                                <span>{currentuser.user.name}</span>
+                                <img className='profileimg' src={currentuser.profilePic} alt="" />
+                                <span>{currentuser.name}</span>
                             </div>
 
                             <div className="posts">
-                                <div className='noOfPosts'>{currentuser.posts.length}</div>
+                                <div className='noOfPosts'>{currentuser.posts==undefined?0:currentuser.posts.length}</div>
                                 <HashLink style={{ textDecoration: 'none', color: 'white' }} to={'#post'}> <div>Posts</div></HashLink>
                             </div>
                             <div className="followers">
-                                <div className='noOfFollower'>{currentuser.user.followers.length}</div>
-                                <Link to={'/follower/' + currentuser.user._id} style={{ textDecoration: 'none' }}><div>  followers</div></Link>
+                                <div className='noOfFollower'>{currentuser.followers==undefined?0:currentuser.followers.length}</div>
+                                <Link to={'/follower/' + currentuser.uid} style={{ textDecoration: 'none' }}><div>  followers</div></Link>
 
                             </div>
                             <div className="following">
-                                <div className='noOfFollowing'>{currentuser.user.following.length}</div>
-                                <Link to={'/following/' + currentuser.user._id} style={{ textDecoration: 'none' }}><div>  following</div></Link>
+                                <div className='noOfFollowing'>{currentuser.following?currentuser.following.length:0}</div>
+                                <Link to={'/following/' + localStorage.getItem('id')} style={{ textDecoration: 'none' }}><div>  following</div></Link>
                             </div>
                         </div>
 
@@ -75,10 +70,11 @@ const Profile = () => {
                             </div>
                         </div>
                     </div>
-                    {currentuser.user._id && <Uploads id={currentuser.user._id} />}
+                    {<Uploads id={localStorage.getItem('id')} />}
                 </>
                 : <div className='loading'>loading...</div>}
         </div>
+       
     )
 }
 

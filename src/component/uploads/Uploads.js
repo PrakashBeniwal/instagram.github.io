@@ -5,28 +5,21 @@ import ViewCompactOutlinedIcon from '@mui/icons-material/ViewCompactOutlined';
 import SlideshowOutlinedIcon from '@mui/icons-material/SlideshowOutlined';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import './uploads.scss'
+import { db } from '../../firebase';
 const Uploads = ({ id }) => {
 
     const [posts, setPosts] = useState([]);
     const [uploads, setUploads] = useState([])
     const [line, setLine] = useState({ h1: 'none', h2: 'none', h3: 'none' })
+    
     useEffect(() => {
-        mypost();
-        // eslint-disable-next-line
-    }, [])
-
-
-    const mypost = () => {
-        fetch(`http://localhost:5544/api/allpost${id}`, {
-            headers: { 'auth-token': localStorage.getItem('token') }
-        }).then(result => {
-            result.json().then(res => {
-                setPosts(res)
-                setUploads(res)
-            })
+        db.ref('/posts').orderByChild("postedBy")
+        .equalTo(id)
+        .on('value',(snap)=>{
+            setPosts(Object.values(snap.val()))
+                setUploads(Object.values(snap.val()))
         })
-    }
-
+    }, [])
     const onclick = (e) => {
 
         if (e === 'post') {
@@ -73,7 +66,7 @@ const Uploads = ({ id }) => {
                 {
                     uploads.map((post) => {
                         return (
-                            <Link to={`/OpenPost/${id}#${post._id}`} key={post._id}>  <div className="postimg" >
+                            <Link to={`/OpenPost/${id}#${post.id}`} key={post.id}>  <div className="postimg" >
                                 <img src={post.post} alt="" />
                             </div></Link>
                         )

@@ -1,64 +1,73 @@
-import { React, useState, useLayoutEffect, useRef } from 'react'
+import { React, useState } from 'react'
 import SlideshowOutlinedIcon from '@mui/icons-material/SlideshowOutlined';
 import './createPost.scss'
+import { storage } from '../../firebase';
 const CreatePost = () => {
   const [post, setPost] = useState("")
   const [caption, setCaption] = useState('')
-  const [url, setUrl] = useState('')
-  const [deleteid, setDeleteid] = useState('')
-  const firstupdate = useRef(false)
-  useLayoutEffect(() => {
-    if (!firstupdate.current) {
-      firstupdate.current = true;
-      return;
-    }
-    fetch('http://localhost:5544/api/post', {
-      method: 'POST',
-      headers: {
-        'auth-token': localStorage.getItem('token')
-        , 'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        caption: caption,
-        post: url,
-        deleteid
-      })
-    }).then(result => {
-      result.json().then(() => {
-        alert('posted succesfully')
-      })
-    })
-    // eslint-disable-next-line
-  }, [url])
-
+  const [loading, setLoading] = useState(false)
   const uploaded = () => {
-    const formdata = new FormData()
-    formdata.append("image", post)
-    fetch("http://localhost:5544/api/createpost", {
-      headers: { 'auth-token': localStorage.getItem('token') },
-      method: "POST",
-      body: formdata
+    if(post){
+      setLoading(true)
+   const uploadImage= storage.ref().child(`/posts/${Date.now()}`).put(post)
+  uploadImage.then(() => {
+    uploadImage.snapshot.ref.getDownloadURL().then((url)=>{
+      fetch('https://instaclone-d3b52-default-rtdb.firebaseio.com/posts.json', {
+        method: 'POST',
+        headers: {
+          'auth-token': localStorage.getItem('token')
+          , 'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          caption: caption,
+          post: url,
+          deleteid:uploadImage.snapshot.metadata.fullPath,
+          postedBy:localStorage.getItem('id')
+        })
+      }).then(result => {
+        result.json().then((res) => {
+          alert('posted succesfully')
+          setLoading(false)
+          fetch(`https://instaclone-d3b52-default-rtdb.firebaseio.com/users/${localStorage.getItem('id')}/posts.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          0:res.name
+        })
+      })
+
+      fetch(`https://instaclone-d3b52-default-rtdb.firebaseio.com/posts/${res.name}.json`, {
+        method: 'PATCH',
+        headers: {
+          'auth-token': localStorage.getItem('token')
+          , 'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id:res.name
+        })
+      })
+        })
+      })
     })
-      .then(res => res.json())
-      .then(data => {
-        setUrl(data.url)
-        setDeleteid(data.deleteid)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
+  }).catch(err=>{
+      alert('err uploading')
+  })
+}else{
+  alert('please select post')
+}
+
+}
 
   return (
-    <div className='createPost'>
-
+    <div  className='createPost'>{loading?<div style={{fontSize:'30px'}}>Loading...</div>:
+    <div>
       <div className="displayPost">
         {post && <img src={URL.createObjectURL(post)} alt="post" />}
       </div>
       <div className="postfile">
         <label>
           Select Image
-          <input type="file" onChange={(e) => { setPost(e.target.files[0]) }} />
+          <input type="file" onChange={(e) => { setPost(e.target.files[0])}} />
           <SlideshowOutlinedIcon style={{ marginLeft: '10px' }} />
         </label>
       </div>
@@ -69,6 +78,7 @@ const CreatePost = () => {
       <div className="posted">
         <button type="submit" onClick={uploaded}>upload</button>
       </div>
+    </div>}
     </div>
   )
 }

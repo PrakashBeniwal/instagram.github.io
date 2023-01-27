@@ -5,9 +5,7 @@ import {
   createBrowserRouter,
   RouterProvider,
   Outlet,
-  Navigate,
 } from "react-router-dom";
-import StoryVideo from './component/storyvideo/StoryVideo';
 import Profile from './pages/profile/Profile';
 import EditProfile from './component/editProfile/EditProfile';
 import Following from './component/following/Following';
@@ -24,15 +22,25 @@ import CreatePost from './component/createPost/CreatePost';
 import Comments from './component/comments/Comments';
 import SearchUser from './component/searchUser/SearchUser';
 import FollowingPosts from './component/posts/FollowingPosts';
+import {auth} from './firebase'
+import {useState} from 'react'
 function App() {
+  const [user, setUser] = useState()
   const Layout = () => {
-      if (!localStorage.getItem('token')) {
-       return(<Navigate to="/login"/>)
-      }
+ auth.onAuthStateChanged(data=>{
+setUser(data)
+localStorage.setItem('id',data.uid)
+ })
     return (
         <div>
-          <Outlet />
+          {!user?
+        <div>
+          <Login/>
+         </div>:
+         <div>
+         <Outlet />
         <Bottombar/>
+         </div>}
         </div> 
     );
   };

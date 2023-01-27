@@ -1,34 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, {useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { AuthContext } from '../../context/authContext'
+import { db } from '../../firebase'
 const Follower = () => {
   const { follower } = useParams()
   const [followers, setFollowers] = useState([])
-  const { currentuser } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch(`http://localhost:5544/api/followers${follower}`, {
-      headers: { 'auth-token': localStorage.getItem('token') }
-    }).then(res => {
-      res.json().then(result => {
-        setFollowers(result)
-      }).catch(err => {
-        console.log(err)
-      })
+    db.ref(`users/${follower}`)  
+    .on('value',(snap)=>{
+
+        snap.val().followers.forEach((i)=>{
+          db.ref(`users/${i}`)
+          .on('value',(snap)=>{
+            if (followers!==[]) {  
+              setFollowers([...followers,snap.val()])
+            }else{setFollowers(snap.val())} 
+          }) 
+        })
     })
   }, [])
   return (
     <div className='followingPage'>
       <div>Followers</div>
-      {followers.map((friend) => {
+      {followers&&followers.map((friend) => {
         return (
-          <div className="person" key={friend._id}>
+          <div className="person" key={friend.uid}>
             <div className="left">
-              <Link to={friend._id !== currentuser._id ? '/userProfile/' + friend._id : '/profile'} style={{ color: 'white', textDecoration: "none" }} > <div><img src={friend.profilePic} alt="" /></div></Link>
+              <Link to={friend.uid !==localStorage.getItem('id') ? '/userProfile/' + friend.uid : '/profile'} style={{ color: 'white', textDecoration: "none" }} > <div><img src={friend.profilePic} alt="" /></div></Link>
               <div className='name'>
                 <span className='username'>
-                  {friend.name}
+                  {friend.username}
                 </span>
                 <span>
                   {friend.name}</span> </div>

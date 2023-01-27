@@ -3,10 +3,10 @@ import './editProfile.scss'
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import { useNavigate } from 'react-router-dom';
+import { db, storage } from '../../firebase';
 const EditProfile = () => {
 
     const [data, setData] = useState('')
-    const [url, setUrl] = useState()
     const [deleteid, setDeleteid] = useState('')
     const [name, setName] = useState('')
     const [username, setUsername] = useState('')
@@ -15,105 +15,62 @@ const EditProfile = () => {
     const [profile, setProfile] = useState('white')
 
     const navigate = useNavigate()
-    const usernameUpdate = () => {
-        fetch('http://localhost:5544/api/uptdateUsername', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json', 'auth-token': localStorage.getItem('token')
-            },
-            body: JSON.stringify({ username })
-        }).then(res => {
-            res.json().then(res => {
-                if (res.problem) {
-                    alert(res.problem)
-                } else {
-                    setColor({ username: 'green', name: 'green', bio: 'green' })
-                    setTimeout(() => {
-                        setColor({ username: 'white', name: 'white', bio: 'white' })
-                    }, 1500);
-                }
 
-            })
+    useEffect(() => {
+
+        db.ref(`users/${localStorage.getItem('id')}`)
+        .on('value',(snap)=>{
+            setName(snap.val().name)
+            setUsername(snap.val().username)
+            setPic(snap.val().profilePic)
+            setDeleteid(snap.val().deleteid)
         })
+    }, [])
+
+
+    const usernameUpdate = () => {
+
+
+        db.ref(`users/${localStorage.getItem('id')}`)
+        .update({username})
+        .then(()=>{
+            setColor({ username: 'green', name: 'green', bio: 'green' })
+                       setTimeout(() => {
+                           setColor({ username: 'white', name: 'white', bio: 'white' })
+                       }, 1500);
+        })
+
     }
 
     const nameUpdate = () => {
-        fetch('http://localhost:5544/api/uptdateName', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json', 'auth-token': localStorage.getItem('token')
-            },
-            body: JSON.stringify({ name })
-        }).then(res => {
-            res.json().then(res => {
-                setColor({ username: 'green', name: 'green', bio: 'green' })
-                setTimeout(() => {
-                    setColor({ username: 'white', name: 'white', bio: 'white' })
-                }, 1500);
-
-            })
+        db.ref(`users/${localStorage.getItem('id')}`)
+        .update({name})
+        .then(()=>{
+            setColor({ username: 'green', name: 'green', bio: 'green' })
+                       setTimeout(() => {
+                           setColor({ username: 'white', name: 'white', bio: 'white' })
+                       }, 1500);
         })
     }
-
-    const me = () => {
-        fetch('http://localhost:5544/api/me',
-            { headers: { 'auth-token': localStorage.getItem('token') } }).then(
-                res => {
-                    res.json().then(result => {
-                        setName(result.user.name)
-                        setUsername(result.user.username)
-                        setPic(result.user.profilePic)
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                }
-            )
-    }
-    useEffect(() => {
-
-        me();
-    }, [])
 
     const uploaded = () => {
-        const formdata = new FormData()
-        formdata.append("image", data)
-        fetch("http://localhost:5544/api/createpost", {
-            headers: { 'auth-token': localStorage.getItem('token') },
-            method: "POST",
-            body: formdata
-        })
-            .then(res => res.json())
-            .then(data => {
-                setUrl(data.url)
-                setDeleteid(data.deleteid)
-                setPic(data.url)
-                setProfile('green')
+        storage.ref(deleteid).delete()
+        const uploadProfile= storage.ref().child(`/profile/${Date.now()}`).put(data)
+
+        uploadProfile.then(()=>{
+            uploadProfile.snapshot.ref.getDownloadURL().then((url)=>{
+                db.ref(`users/${localStorage.getItem('id')}`)
+                 .update({profilePic:url,deleteid:uploadProfile.snapshot.metadata.fullPath})
+                 setProfile('green')
                 setTimeout(() => {
                     setProfile('white')
                 }, 1500);
             })
-            .catch(err => {
-                console.log(err)
-            })
+        })
     }
 
     const uploadPic = () => {
-
-        if (url) {
-            fetch('http://localhost:5544/api/updatepic', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json', 'auth-token': localStorage.getItem('token')
-                },
-                body: JSON.stringify({ pic: url })
-            }).then(res => {
-                res.json().then(res => {
-                })
-            })
-        }
-
         navigate('/profile')
-
     }
 
 

@@ -3,21 +3,18 @@ import Post from '../post/Post'
 import { useState, useEffect } from 'react'
 import './openPost.scss'
 import { useParams } from 'react-router-dom'
-
+import { db } from '../../firebase'
 const OpenPost = () => {
 
   const [posts, setPosts] = useState([])
   const { open } = useParams();
   useEffect(() => {
 
-    fetch(`http://localhost:5544/api/allpost${open}`, {
-      headers: { 'auth-token': localStorage.getItem('token') }
-    }).then(result => {
-      result.json().then(res => {
-        setPosts(res)
-      })
-    })
-
+    db.ref('/posts').orderByChild("postedBy")
+        .equalTo(open)
+        .on('value',(snap)=>{
+            setPosts(Object.values(snap.val()))
+        })
   }, [])
 
   return (
@@ -26,7 +23,7 @@ const OpenPost = () => {
         {posts.map((post) => {
           return (
 
-            <div className='post' key={post._id} id={post._id}>
+            <div className='post' key={post.id} id={post.id}>
 
               <Post post={post} />
             </div>

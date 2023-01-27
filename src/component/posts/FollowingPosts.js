@@ -4,6 +4,7 @@ import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined
 import './posts.scss'
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { db } from '../../firebase';
 const FollowingPosts = () => {
 
 
@@ -13,24 +14,32 @@ const FollowingPosts = () => {
   const [select, setSelect] = useState(true)
 
   const followingpost = () => {
-    fetch('http://localhost:5544/api/subpost', {
-      headers: { 'auth-token': localStorage.getItem('token') }
-    }).then(result => {
-      result.json().then(res => {
-        setFollowingPosts(res)
+
+    db.ref(`posts`)
+    .on('value',(snap)=>{
+      setFollowingPosts(Object.values(snap.val()))
         setSelect(true)
-      }).catch(err => {
-        console.log(err)
-      })
     })
+
+    // fetch('https://instaclone-d3b52-default-rtdb.firebaseio.com/posts.json', {
+    //   headers: { 'auth-token': localStorage.getItem('token') }
+    // }).then(result => {
+    //   result.json().then(res => {
+    //     setFollowingPosts(Object.values(res))
+    //     setSelect(true)
+    //   }).catch(err => {
+    //     console.log(err)
+    //   })
+    // })
   }
 
   const postfetch = () => {
-    fetch('http://localhost:5544/api/allpost', {
+
+    fetch('https://instaclone-d3b52-default-rtdb.firebaseio.com/posts.json', {
       headers: { 'auth-token': localStorage.getItem('token') }
     }).then(result => {
       result.json().then(res => {
-        setPosts(res)
+        setPosts(Object.values(res))
         setSelect(false)
       })
     })
@@ -64,7 +73,7 @@ const FollowingPosts = () => {
       <div className='allpost'>
         {(select ? followingposts : posts).map((post) => {
           return (
-            <div key={post._id} className='post'>
+            <div key={post.id} className='post'>
               <Post post={post} />
             </div>
           )
